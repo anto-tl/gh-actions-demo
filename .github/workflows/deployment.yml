@@ -26,7 +26,17 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Build with Gradle
-      run: ./gradlew build
+    - name: Build and test
+      run: |
+        # Step 1: setup directories and files as super user
+        # Step 2: create a non-super user for elastic to run
+        id -u build &>/dev/null || useradd --user-group --create-home --shell /bin/bash build
+        su build -c "bash ./gradlew clean"
+
+        # Step 3: Fix environment specific variables
+        # sed -i "s/#build_version#/${BUILD_NUMBER}/g" server/src/main/java/com/titaniamlabs/service/CryptoService.java
+
+        # Step 4: Run the build
+        su build -c "bash ./gradlew build"
 
     
