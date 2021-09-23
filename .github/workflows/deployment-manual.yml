@@ -16,4 +16,4 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Grant execute permission for gradlew
-      run: echo "Testing..."
+      run: echo Hello world!!
